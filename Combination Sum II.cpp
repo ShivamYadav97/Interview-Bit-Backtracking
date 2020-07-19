@@ -1,5 +1,12 @@
 bool solveit(vector<vector<int> > &an,int &sum,vector<int> &temp,vector<int> A,int B,int ind)
 {
+    map<int,bool> done;
+    for (int i = ind; i < A.size(); i++)
+    {
+        if(done.find(A[i])==done.end()) 
+            done[A[i]]=false;
+    }
+
     if(sum==B)
     {
         an.push_back(temp);
@@ -12,9 +19,10 @@ bool solveit(vector<vector<int> > &an,int &sum,vector<int> &temp,vector<int> A,i
     if(ind==A.size())
         return false;
         
-    for(int i=ind;i<A.size();)
+    for(int i=ind;i<A.size();i++)
     {
-        sum+=A[i];
+        // linear search
+        /*sum+=A[i];
         temp.push_back(A[i]);
         solveit(an,sum,temp,A,B,i+1);
         
@@ -25,8 +33,18 @@ bool solveit(vector<vector<int> > &an,int &sum,vector<int> &temp,vector<int> A,i
             
             if(A[i1]!=A[i1-1]) break;
             i++;
+        }*/
+
+        //optimization using map (log n search) 
+        if(!done[A[i]])
+        {
+            sum+=A[i];
+            temp.push_back(A[i]);
+            done[A[i]]=true;
+            solveit(an,sum,temp,A,B,i+1);
+            sum-=A[i];
+            temp.pop_back();
         }
-        
     }
     return false;
     
